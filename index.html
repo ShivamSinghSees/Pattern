@@ -4,9 +4,18 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
   </head>
   <body>
-    <div class="pattern-conteiner">
+    <i
+      class="fa fa-refresh"
+      id="refresh"
+      style="font-size: 36px; color: white;cursor: pointer;"
+    ></i>
+    <div class="pattern-container">
       <div class="pattern"><p class="test" id="point-1"></p></div>
       <div class="pattern"><p class="test" id="point-2"></p></div>
       <div class="pattern"><p class="test" id="point-3"></p></div>
@@ -19,141 +28,19 @@
     </div>
   </body>
 
-  <script defer>
-    const route = [];
-    const myDiv = document.querySelectorAll(".test");
-    let isMouseDown = false;
-
-    function addPatternId(id) {
-      if (!route.includes(id)) {
-        route.push(id);
-        console.log(route);
-        createLineBetweenSelectedPoints();
-        createTheCurrentPointRouteLine();
-      }
-    }
-
-    if (myDiv) {
-      myDiv.forEach((child) => {
-        child.addEventListener("mouseenter", (event) => {
-          if (event.buttons === 1) {
-            const clickedElement = event.target;
-            const id = clickedElement.getAttribute("id");
-            addPatternId(id);
-          }
-        });
-        child.addEventListener("click", (event) => {});
-        child.addEventListener("mousedown", (event) => {
-          if (!route.length) {
-            route.push(event.target.getAttribute("id"));
-            createTheCurrentPointRouteLine();
-          }
-        });
-      });
-    }
-
-    function removeLineFromDom() {
-      let lineElement = document.getElementById("line");
-      if (lineElement) {
-        lineElement.remove();
-      }
-    }
-
-    function createTheCurrentPointRouteLine() {
-      console.log(route, "route");
-      const startPoint = document.getElementById(route[route.length - 1]);
-      removeLineFromDom();
-      // Create an SVG element to draw the line
-      const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-      svg.style.position = "fixed";
-      svg.setAttribute("id", "line");
-      svg.style.top = "0";
-      svg.style.left = "0";
-      svg.style.width = "100%";
-      svg.style.height = "100%";
-      svg.style.pointerEvents = "none";
-      document.body.appendChild(svg);
-
-      // Create the line element
-      const line = document.createElementNS(
-        "http://www.w3.org/2000/svg",
-        "line"
-      );
-      line.setAttribute("stroke", "white");
-      line.setAttribute("stroke-width", "2");
-      svg.appendChild(line);
-
-      // Function to update the line
-      function updateLine(event) {
-        const rect = startPoint.getBoundingClientRect();
-        const startX = rect.left + rect.width / 2;
-        const startY = rect.top + rect.height / 2;
-
-        line.setAttribute("x1", startX);
-        line.setAttribute("y1", startY);
-        line.setAttribute("x2", event.clientX);
-        line.setAttribute("y2", event.clientY);
-      }
-      document.addEventListener("mousemove", updateLine);
-    }
-
-    // Add mousemove event listener
-
-    function createLineBetweenSelectedPoints() {
-      let secondLast = route[route.length - 2];
-      let Last = route[route.length - 1];
-      if (!secondLast || !Last) return;
-      console.log(secondLast);
-      const startPoint = document.getElementById(secondLast); // second last point
-      const endPoint = document.getElementById(Last); // second last point
-
-      const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
-      svg.style.position = "absolute";
-      svg.style.top = "0";
-      svg.style.left = "0";
-      svg.style.width = "100%";
-      svg.style.height = "100%";
-      svg.style.pointerEvents = "none";
-      document.body.appendChild(svg);
-
-      // Create the line element
-      const line = document.createElementNS(
-        "http://www.w3.org/2000/svg",
-        "line"
-      );
-      line.setAttribute("stroke", "white");
-      line.setAttribute("stroke-width", "2");
-      svg.appendChild(line);
-
-      // Calculate the center points of the elements
-      const startRect = startPoint.getBoundingClientRect();
-      const endRect = endPoint.getBoundingClientRect();
-
-      const startX = startRect.left + startRect.width / 2;
-      const startY = startRect.top + startRect.height / 2;
-      const endX = endRect.left + endRect.width / 2;
-      const endY = endRect.top + endRect.height / 2;
-
-      // Set the line coordinates
-      line.setAttribute("x1", startX);
-      line.setAttribute("y1", startY);
-      line.setAttribute("x2", endX);
-      line.setAttribute("y2", endY);
-    }
-
-    document.addEventListener("mouseup", () => {
-      removeLineFromDom();
-    });
+  <script src='./index.js' defer>
+   
   </script>
-
   <style>
     body {
       background: #000;
       display: flex;
       justify-content: center;
       margin-top: 100px;
+      align-items: center;
+      flex-direction: column;
     }
-    .pattern-conteiner {
+    .pattern-container {
       width: 300px;
       height: 300px;
       border: 1px solid;
